@@ -5,13 +5,14 @@ pub mod prognoses;
 use crate::optimizer_context::{
     action::{constant::ConstantAction, variable::VariableAction},
     battery::Battery,
-    prognoses::Prognoses,
+    prognoses::{ElectricityPrognoses, PricePrognoses},
 };
 
 pub struct OptimizerContext {
-    electricity_price: Prognoses,
-    generated_electricity: Prognoses,
-    beyond_control_consumption: Prognoses,
+    electricity_price: PricePrognoses,
+    generated_electricity: ElectricityPrognoses,
+    beyond_control_consumption: ElectricityPrognoses,
+
     batteries: Vec<Battery>,
 
     constant_actions: Vec<ConstantAction>,
