@@ -1,5 +1,5 @@
 [package]
-name = "rust_optimizer"
+name = "electricity_price_optimizer"
 version = "0.1.0"
 edition = "2024"
 

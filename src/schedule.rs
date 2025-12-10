@@ -1,7 +1,7 @@
-use crate::action::constant_action::ConstantAction;
-use crate::action::variable_action::VariableAction;
+use crate::action::constant::ConstantAction;
+use crate::action::variable::{AssignedVariableAction};
 
-struct Schedule {
+pub struct Schedule {
     pub constant_actions: Vec<(i32, ConstantAction)>,
-    pub variable_actions: Vec<(i32, VariableAction)>,
+    pub variable_actions: Vec<AssignedVariableAction>,
 }

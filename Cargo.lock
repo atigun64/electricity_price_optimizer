@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "rust_optimizer"
+name = "electricity_price_optimizer"
 version = "0.1.0"

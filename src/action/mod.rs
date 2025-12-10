@@ -1,2 +1,4 @@
-pub mod constant_action;
-pub mod variable_action;
+pub mod constant;
+pub mod variable;
+
+pub trait Action {}
