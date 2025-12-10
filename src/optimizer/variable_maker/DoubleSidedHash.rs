@@ -46,24 +46,6 @@ where
         self.b_to_a.get(b)
     }
 
-    pub fn remove_by_a(&mut self, a: &A) -> Option<B> {
-        if let Some(b) = self.a_to_b.remove(a) {
-            self.b_to_a.remove(&b);
-            Some(b)
-        } else {
-            None
-        }
-    }
-
-    pub fn remove_by_b(&mut self, b: &B) -> Option<A> {
-        if let Some(a) = self.b_to_a.remove(b) {
-            self.a_to_b.remove(&a);
-            Some(a)
-        } else {
-            None
-        }
-    }
-
     pub fn contains_a(&self, a: &A) -> bool {
         self.a_to_b.contains_key(a)
     }

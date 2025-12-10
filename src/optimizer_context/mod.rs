@@ -12,7 +12,7 @@ pub struct OptimizerContext {
     electricity_price: PricePrognoses,
     generated_electricity: ElectricityPrognoses,
     beyond_control_consumption: ElectricityPrognoses,
-    
+
     batteries: Vec<Battery>,
 
     constant_actions: Vec<ConstantAction>,
