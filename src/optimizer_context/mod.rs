@@ -2,6 +2,8 @@ pub mod action;
 pub mod battery;
 pub mod prognoses;
 
+use std::rc::Rc;
+
 use crate::optimizer_context::{
     action::{constant::ConstantAction, variable::VariableAction},
     battery::Battery,
@@ -15,6 +17,11 @@ pub struct OptimizerContext {
 
     batteries: Vec<Battery>,
 
-    constant_actions: Vec<ConstantAction>,
-    variable_actions: Vec<VariableAction>,
+    constant_actions: Vec<Rc<ConstantAction>>,
+    variable_actions: Vec<Rc<VariableAction>>,
+}
+impl OptimizerContext {
+    pub fn get_constant_actions(&self) -> &Vec<Rc<ConstantAction>> {
+        &self.constant_actions
+    }
 }

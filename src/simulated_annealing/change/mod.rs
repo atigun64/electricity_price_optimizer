@@ -1,4 +1,4 @@
-mod multi_change;
+pub mod multi_change;
 mod random_helpers;
 mod random_move;
 use crate::simulated_annealing::state::State;

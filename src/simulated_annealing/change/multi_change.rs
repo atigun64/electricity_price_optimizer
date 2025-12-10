@@ -3,7 +3,7 @@ use crate::simulated_annealing::{
     state::State,
 };
 
-struct MultiChange {
+pub struct MultiChange {
     changes: Vec<Box<dyn Change>>,
 }
 

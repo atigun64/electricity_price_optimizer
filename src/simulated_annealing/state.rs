@@ -1,13 +1,34 @@
-use crate::optimizer_context::action::{
-    constant::AssignedConstantAction, variable::VariableAction,
+use crate::optimizer_context::{
+    OptimizerContext,
+    action::{
+        constant::{self, AssignedConstantAction},
+        variable::VariableAction,
+    },
 };
 
 pub struct State {
     constant_actions: Vec<AssignedConstantAction>,
-    variable_actions: Vec<VariableAction>,
+
+    context: OptimizerContext,
 }
 
 impl State {
+    pub fn new(context: OptimizerContext) -> Self {
+        let constant_actions = context
+            .get_constant_actions()
+            .iter()
+            .map(|action| {
+                let start = action.get_start_from();
+                let end = action.get_end_before() - action.duration;
+                let middle = (start + end) / 2;
+                AssignedConstantAction::new(action.clone(), middle)
+            })
+            .collect();
+        Self {
+            constant_actions,
+            context,
+        }
+    }
     pub fn get_constant_actions(&self) -> &Vec<AssignedConstantAction> {
         &self.constant_actions
     }
