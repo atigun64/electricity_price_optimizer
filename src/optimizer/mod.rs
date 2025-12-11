@@ -7,14 +7,15 @@ use crate::simulated_annealing::state::State;
 
 pub const MINUTES_PER_DAY: u32 = 60 * 24;
 
-struct optimizer {
+struct Optimizer {
     pub mf:MinCostFlow,
     pub variable_map:VariableMaker,
 }
 
-impl optimizer {
+impl Optimizer {
     pub fn new(state: &State) -> Self {
-        let variable_map = VariableMaker::new(state.get_context());
+        let context = state.get_context();
+        let variable_map = VariableMaker::new(context);
 
         let WIRE = variable_maker::WIRE;
 
@@ -28,9 +29,10 @@ impl optimizer {
         mf.add_edge(variable_maker::FORK_FROM_SOURCE as usize, variable_maker::NETWORK as usize, total_flow, 0);
         mf.add_edge(variable_maker::FORK_FROM_SOURCE as usize, variable_maker::GENERATOR as usize, total_flow, 0);
 
-        // Generator to System flow
+        // Generator to Wire
+        // let generator_prognoses = context.get_
         for t in 0..MINUTES_PER_DAY {
-
+            mf.add_edge(variable_maker::GENERATOR as usize, variable_map.get_WIRE_index(t).unwrap() as usize, 0);
         }
 
         Self {
