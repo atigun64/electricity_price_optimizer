@@ -20,16 +20,17 @@ pub const SYSTEM_FLOW: ItemId = -42;
 
 
 pub type PersistentVariableIndex = (ItemId, Timestamp);
+pub type PersistentVariableWithCapacityIndex = (ItemId, Timestamp, bool);
 
 pub struct VariableMaker { 
     variable_count: u32,
     
-    persistent_variable_indices: BiMap<PersistentVariableIndex, usize>,
+    persistent_variable_indices: BiMap<PersistentVariableIndex, u32>,
 }
 impl VariableMaker {
     pub fn new(context: &OptimizerContext) -> Self {
-        let mut variable_count = 4;
-        let mut persistent = BiMap::new();
+        let mut variable_count: u32 = 4;
+        let mut persistent: BiMap<PersistentVariableIndex, u32> = BiMap::new();
         
         for var_action in context.get_variable_actions().iter() {
             let item_id = var_action.get_id() as ItemId;
@@ -58,18 +59,18 @@ impl VariableMaker {
         }
     }
 
-    pub fn get_action_variable_index(&self, item_id: ItemId, timestamp: Timestamp) -> Option<usize> {
+    pub fn get_action_variable_index(&self, item_id: ItemId, timestamp: Timestamp) -> Option<u32> {
         self.persistent_variable_indices.get_by_a(&(item_id, timestamp)).cloned()
     }
-    pub fn get_constant_action_variable_index(&self, item_id: ItemId, timestamp: Timestamp) -> Option<usize> {
+    pub fn get_constant_action_variable_index(&self, item_id: ItemId, timestamp: Timestamp) -> Option<u32> {
         self.persistent_variable_indices.get_by_a(&(item_id, timestamp)).cloned()
     }
-    pub fn get_battery_variable_index(&self, item_id: ItemId, timestamp: Timestamp) -> Option<usize> {
+    pub fn get_battery_variable_index(&self, item_id: ItemId, timestamp: Timestamp) -> Option<u32> {
         self.persistent_variable_indices.get_by_a(&(item_id, timestamp)).cloned()
     }
 
-    pub fn get_system_flow_index(&self, timestamp: Timestamp) {
-        self.persistent_variable_indices.get_by_a(&(SYSTEM_FLOW, timestamp)).cloned();
+    pub fn get_system_flow_index(&self, timestamp: Timestamp) -> Option<u32> {
+        self.persistent_variable_indices.get_by_a(&(SYSTEM_FLOW, timestamp)).cloned()
     }
 
     pub fn get_variable_count(&self) -> u32 {
