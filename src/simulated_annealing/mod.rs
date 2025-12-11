@@ -42,3 +42,15 @@ pub fn run_simulated_annealing(context: OptimizerContext) {
 
     // somehow also get the final schedule out of the state
 }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     #[test]
+//     fn test_simulated_annealing() {
+//         let context = OptimizerContext::new(); // Assuming a constructor exists
+//         run_simulated_annealing(context);
+//         // Add assertions to verify the results
+//     }
+// }

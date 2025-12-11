@@ -5,22 +5,41 @@ pub mod prognoses;
 use std::rc::Rc;
 
 use crate::optimizer_context::{
-    action::{constant::ConstantAction, variable::VariableAction},
+    action::{constant::{AssignedConstantAction, ConstantAction}, variable::VariableAction},
     battery::Battery,
-    prognoses::{ElectricityPrognoses, PricePrognoses},
+    prognoses::Prognoses,
 };
 
+#[derive(Clone)]
 pub struct OptimizerContext {
-    electricity_price: PricePrognoses,
-    generated_electricity: ElectricityPrognoses,
-    beyond_control_consumption: ElectricityPrognoses,
+    electricity_price: Rc<Prognoses<i32>>,
+    generated_electricity: Rc<Prognoses<i32>>,
+    beyond_control_consumption: Prognoses<i32>,
 
-    batteries: Vec<Battery>,
+    batteries: Rc<Vec<Battery>>,
 
     constant_actions: Vec<Rc<ConstantAction>>,
     variable_actions: Vec<Rc<VariableAction>>,
 }
 impl OptimizerContext {
+    pub fn new(
+        electricity_price: Prognoses<i32>,
+        generated_electricity: Prognoses<i32>,
+        beyond_control_consumption: Prognoses<i32>,
+        batteries: Vec<Battery>,
+        constant_actions: Vec<Rc<ConstantAction>>,
+        variable_actions: Vec<Rc<VariableAction>>,
+    ) -> Self {
+        Self {
+            electricity_price: Rc::new(electricity_price),
+            generated_electricity: Rc::new(generated_electricity),
+            beyond_control_consumption,
+            batteries: Rc::new(batteries),
+            constant_actions,
+            variable_actions,
+        }
+    }
+
     pub fn get_constant_actions(&self) -> &Vec<Rc<ConstantAction>> {
         &self.constant_actions
     }
@@ -29,5 +48,9 @@ impl OptimizerContext {
     }
     pub fn get_batteries(&self) -> &Vec<Battery> {
         &self.batteries
+    }
+
+    pub fn add_constant_action_to_consumption(&mut self, action: &AssignedConstantAction) {
+        self.beyond_control_consumption.add_constant_action(action);
     }
 }

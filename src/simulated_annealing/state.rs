@@ -42,4 +42,12 @@ impl State {
     pub fn get_context(&self) -> &OptimizerContext {
         &self.context
     }
+
+    pub fn to_fixed_context(&self) -> OptimizerContext {
+        let mut new_context = self.context.clone();
+        for action in &self.constant_actions {
+            new_context.add_constant_action_to_consumption(action);
+        }
+        new_context
+    }
 }
