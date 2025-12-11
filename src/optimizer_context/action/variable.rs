@@ -7,6 +7,38 @@ pub struct VariableAction {
     pub max_consumption: i32,
     id: i32,
 }
+
+impl VariableAction {
+    pub fn new(
+        start: i32,
+        end: i32,
+        total_consumption: i32,
+        max_consumption: i32,
+        id: i32,
+    ) -> Self {
+        assert!(
+            start < end,
+            "Invalid variable action time bounds: start must be less than end"
+        );
+        Self {
+            start,
+            end,
+            total_consumption,
+            max_consumption,
+            id,
+        }
+    }
+    pub fn get_start(&self) -> i32 {
+        self.start
+    }
+    pub fn get_end(&self) -> i32 {
+        self.end
+    }
+    pub fn get_id(&self) -> i32 {
+        self.id
+    }
+}
+
 pub struct AssignedVariableAction {
     action: Rc<VariableAction>,
     consumption: Vec<u32>,
