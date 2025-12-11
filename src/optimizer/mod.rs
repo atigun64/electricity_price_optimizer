@@ -83,17 +83,17 @@ fn construct_battery(
         let id = b.get_id();
 
         // Initialize battery
-        let first_battery_incoming_num = variable_map.get_battery_variable_index(id, 0, true);
+        let first_battery_incoming_num = variable_map.get_persistent_variable_index(id, 0, true);
         let initial_level = b.get_initial_level() as i64;
         mf.add_edge(variable_maker::SOURCE as usize, first_battery_incoming_num.unwrap() as usize, initial_level, 0);
 
 
-        add_battery_capacity(id, mf, variable_map, b.get_capacity() as i64);
+        add_variable_capacity(id, mf, variable_map, b.get_capacity() as i64);
 
         // Wire to Batteries
         for t in 0..MINUTES_PER_DAY {
-            let battery_incoming_num = variable_map.get_battery_variable_index(id, t, true);
-            let battery_outgoing_num = variable_map.get_battery_variable_index(id, t, false);
+            let battery_incoming_num = variable_map.get_persistent_variable_index(id, t, true);
+            let battery_outgoing_num = variable_map.get_persistent_variable_index(id, t, false);
             let wire_num = variable_map.get_wire_index(t).unwrap();
 
             // Wire to battery
@@ -115,8 +115,8 @@ fn construct_battery(
 
         // Battery persistence
         for t in 0..(MINUTES_PER_DAY - 1) {
-            let battery_current_num = variable_map.get_battery_variable_index(id, t, false);
-            let battery_next_num = variable_map.get_battery_variable_index(id, t + 1, true);
+            let battery_current_num = variable_map.get_persistent_variable_index(id, t, false);
+            let battery_next_num = variable_map.get_persistent_variable_index(id, t + 1, true);
 
             mf.add_edge(
                 battery_current_num.unwrap() as usize,
@@ -136,11 +136,11 @@ fn construct_action(
     for a in context.get_variable_actions() {
         let id = a.get_id() as i32;
 
-        add_action_variable_capacity(id, mf, variable_map, a.get_total_consumption() as i64);
+        add_variable_capacity(id, mf, variable_map, a.get_total_consumption() as i64);
 
         // Wire to Actions
         for t in 0..MINUTES_PER_DAY {
-            let action_incoming_num = variable_map.get_action_variable_index(id, t, true);
+            let action_incoming_num = variable_map.get_persistent_variable_index(id, t, true);
             let action_max_consumption = a.get_max_consumption() as i64;
 
             mf.add_edge(
@@ -153,8 +153,8 @@ fn construct_action(
 
         // Action persistence
         for t in 0..(MINUTES_PER_DAY - 1) {
-            let action_current_num = variable_map.get_action_variable_index(id, t, false);
-            let action_next_num = variable_map.get_action_variable_index(id, t + 1, true);
+            let action_current_num = variable_map.get_persistent_variable_index(id, t, false);
+            let action_next_num = variable_map.get_persistent_variable_index(id, t + 1, true);
 
             mf.add_edge(
                 action_current_num.unwrap() as usize,
@@ -164,12 +164,12 @@ fn construct_action(
             );
         }
 
-        let action_end_num = variable_map.get_action_variable_index(id, MINUTES_PER_DAY - 1, false);
+        let action_end_num = variable_map.get_persistent_variable_index(id, MINUTES_PER_DAY - 1, false);
         mf.add_edge(action_end_num.unwrap() as usize, variable_maker::SINK as usize, INF, 0);
     }
 }
 
-fn add_action_variable_capacity(
+fn add_variable_capacity(
     item_id: i32,
     mf: &mut MinCostFlow,
     variable_map: &VariableMaker,
@@ -178,30 +178,10 @@ fn add_action_variable_capacity(
     for t in 0..MINUTES_PER_DAY {
         mf.add_edge(
             variable_map
-                .get_action_variable_index(item_id, t, true)
+                .get_persistent_variable_index(item_id, t, true)
                 .unwrap() as usize,
             variable_map
-                .get_action_variable_index(item_id, t, false)
-                .unwrap() as usize,
-            cap,
-            0,
-        );
-    }
-}
-
-fn add_battery_capacity(
-    item_id: i32,
-    mf: &mut MinCostFlow,
-    variable_map: &VariableMaker,
-    cap: i64,
-) {
-    for t in 0..MINUTES_PER_DAY {
-        mf.add_edge(
-            variable_map
-                .get_battery_variable_index(item_id, t, true)
-                .unwrap() as usize,
-            variable_map
-                .get_battery_variable_index(item_id, t, false)
+                .get_persistent_variable_index(item_id, t, false)
                 .unwrap() as usize,
             cap,
             0,
@@ -233,7 +213,7 @@ fn calculate_total_flow(context: &OptimizerContext) -> i64 {
     for action in context.get_variable_actions() {
         total += action.get_total_consumption() as i64;
     }
-    
+
     return total;
 }
 

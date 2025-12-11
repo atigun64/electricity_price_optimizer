@@ -68,10 +68,7 @@ impl VariableMaker {
         }
     }
 
-    pub fn get_action_variable_index(&self, item_id: ItemId, timestamp: Timestamp, incoming: bool) -> Option<u32> {
-        self.persistent_variable_with_capacity_index.get_by_a(&(item_id, timestamp, incoming)).cloned()
-    }
-    pub fn get_battery_variable_index(&self, item_id: ItemId, timestamp: Timestamp, incoming: bool) -> Option<u32> {
+    pub fn get_persistent_variable_index(&self, item_id: ItemId, timestamp: Timestamp, incoming: bool) -> Option<u32> {
         self.persistent_variable_with_capacity_index.get_by_a(&(item_id, timestamp, incoming)).cloned()
     }
 
