@@ -24,4 +24,10 @@ impl OptimizerContext {
     pub fn get_constant_actions(&self) -> &Vec<Rc<ConstantAction>> {
         &self.constant_actions
     }
+    pub fn get_variable_actions(&self) -> &Vec<Rc<VariableAction>> {
+        &self.variable_actions
+    }
+    pub fn get_batteries(&self) -> &Vec<Battery> {
+        &self.batteries
+    }
 }

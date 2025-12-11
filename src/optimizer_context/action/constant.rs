@@ -27,6 +27,9 @@ impl ConstantAction {
     pub fn get_end_before(&self) -> i32 {
         self.end_before
     }
+    pub fn get_id(&self) -> i32 {
+        self.id
+    }
 }
 
 pub struct AssignedConstantAction {
