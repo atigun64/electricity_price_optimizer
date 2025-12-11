@@ -64,7 +64,7 @@ pub fn contrusct_flow(context: &OptimizerContext) -> (MinCostFlow, VariableMaker
             *network_prognoses.get(t as usize).unwrap() as i64,
         );
     }
-    
+
     construct_battery(&mut mcmf, &variable_map, context);
 
     construct_action(&mut mcmf, &variable_map, context);
@@ -79,14 +79,18 @@ fn construct_battery(
     variable_map: &VariableMaker,
     context: &OptimizerContext,
 ) {
-    for b in context.get_batteries() { 
+    for b in context.get_batteries() {
         let id = b.get_id();
 
         // Initialize battery
         let first_battery_incoming_num = variable_map.get_battery_variable_index(id, 0, true);
         let initial_level = b.get_initial_level() as i64;
-        mf.add_edge(variable_maker::SOURCE as usize, first_battery_incoming_num.unwrap() as usize, initial_level, 0);
-
+        mf.add_edge(
+            variable_maker::SOURCE as usize,
+            first_battery_incoming_num.unwrap() as usize,
+            initial_level,
+            0,
+        );
 
         add_battery_capacity(id, mf, variable_map, b.get_capacity() as i64);
 
@@ -165,7 +169,12 @@ fn construct_action(
         }
 
         let action_end_num = variable_map.get_action_variable_index(id, MINUTES_PER_DAY - 1, false);
-        mf.add_edge(action_end_num.unwrap() as usize, variable_maker::SINK as usize, INF, 0);
+        mf.add_edge(
+            action_end_num.unwrap() as usize,
+            variable_maker::SINK as usize,
+            INF,
+            0,
+        );
     }
 }
 
@@ -233,7 +242,13 @@ fn calculate_total_flow(context: &OptimizerContext) -> i64 {
     for action in context.get_variable_actions() {
         total += action.get_total_consumption() as i64;
     }
-    
+
+    total += context
+        .get_beyond_control_consumption()
+        .get_data()
+        .iter()
+        .to_owned()
+        .sum::<i32>() as i64;
     return total;
 }
 
