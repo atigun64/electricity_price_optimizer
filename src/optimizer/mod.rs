@@ -17,13 +17,13 @@ impl optimizer {
 
         let SYSTEM_FLOW = variable_maker.SYSTEM_FLOW;
 
-        let mf = MinCostFlow::new(variable_maker.get_variable_count(), variable_maker.SOURCE, variable_maker.SINK);
+        let mf = MinCostFlow::new(variable_maker.get_variable_count(), variable_maker.SOURCE, variable_maker.SINK, 0, 0);
     
         mf.add_edge(variable_maker.SOURCE, variable_maker.NETWORK);
         mf.add_edge(variable_maker.SOURCE, variable_maker.GENERATOR);
 
         for t in (0, MINUTES_PER_DAY) {
-            mf.add_edge(variable_maker.SOURCE, variable_maker.get_system_flow_index(SYSTEM_FLOW, t), )
+            mf.add_edge(variable_maker.SOURCE, variable_maker.get_system_flow_index(SYSTEM_FLOW, t), 0, 0);
         }
     }
 }
