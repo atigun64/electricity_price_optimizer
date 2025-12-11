@@ -39,4 +39,7 @@ impl State {
     pub fn set_constant_actions(&mut self, constant_actions: Vec<AssignedConstantAction>) {
         self.constant_actions = constant_actions;
     }
+    pub fn get_context(&self) -> &OptimizerContext {
+        &self.context
+    }
 }

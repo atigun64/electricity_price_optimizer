@@ -4,10 +4,10 @@ use crate::variable_maker::DoubleSidedHash::BiMap;
 
 const MINUTES_PER_DAY: u32 = 60 * 24;
 
-const SOURCE: u32 = 0;
-const SINK: u32 = 1;
-const NETWORK: u32 = 2;
-const GENERATOR: u32 = 3;
+pub const SOURCE: u32 = 0;
+pub const SINK: u32 = 1;
+pub const NETWORK: u32 = 2;
+pub const GENERATOR: u32 = 3;
 
 pub type ItemId = u32;
 pub type Timestamp = u32;
